@@ -21,12 +21,17 @@ public class ExpenseDto {
 
 
     private Long id;
+
     private String expenseId;
+
     private String name;
+
     private String description;
 
     private BigDecimal amount;
+
     private Date date;
+
     private String dateString;
 
 }
