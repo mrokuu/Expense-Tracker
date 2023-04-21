@@ -10,6 +10,7 @@ import com.expensemanager.expensemanager.service.ExpenseService;
 import com.expensemanager.expensemanager.util.DateTimeUtil;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -97,6 +98,16 @@ public class ExpenseServiceImpl implements ExpenseService {
 			filteredList.sort((o1, o2) -> o2.getAmount().compareTo(o1.getAmount()));
 		}
 		return filteredList;
+	}
+
+	@Override
+	public BigDecimal totalExpenses(List<ExpenseDto> expenseDtoList) {
+		BigDecimal sum = new BigDecimal(0);
+		BigDecimal totalSum = expenseDtoList
+				.stream()
+				.map(x -> x.getAmount().add(sum))
+				.reduce(BigDecimal.ZERO, BigDecimal::add);
+		return totalSum;
 	}
 
 

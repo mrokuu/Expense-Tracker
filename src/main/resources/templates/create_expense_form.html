@@ -17,6 +17,7 @@
                 th:field="*{name}"
         />
     </div>
+    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
     <div>
         <input
                 type="text"
@@ -25,10 +26,11 @@
         />
 
     </div>
+    <span th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
     <div>
         <input type="text" th:field="*{dateString}" placeholder="dd/mm/yyyy" id="createdAt"/>
-
     </div>
+    <span th:if="${#fields.hasErrors('dateString')}" th:errors="*{dateString}"></span>
     <div>
         <textarea
                 rows="5"

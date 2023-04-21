@@ -4,11 +4,14 @@ import com.expensemanager.expensemanager.dto.ExpenseDto;
 import com.expensemanager.expensemanager.dto.ExpenseFilterDto;
 import com.expensemanager.expensemanager.entity.Expense;
 import com.expensemanager.expensemanager.service.implementation.ExpenseServiceImpl;
+import com.expensemanager.expensemanager.validator.ExpenseValidator;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.List;
 
@@ -25,9 +28,11 @@ public class ExpenseController {
     @GetMapping("/expenses")
     public String showExpenseList(Model model,
                                   ExpenseFilterDto expenseFilterDto){
-        List<ExpenseDto> lists= expenseService.findAllExpenses();
-        model.addAttribute("expenses", lists);
+        List<ExpenseDto> list= expenseService.findAllExpenses();
+        model.addAttribute("expenses", list);
         model.addAttribute("filter", expenseFilterDto);
+        BigDecimal totalExpenses = expenseService.totalExpenses(list);
+        model.addAttribute("totalExpenses", totalExpenses);
         return "expenses_list";
     }
 
@@ -39,8 +44,13 @@ public class ExpenseController {
     }
 
     @PostMapping("/saveOrUpdateExpense")
-    public String saveOrUpddateExpense(@ModelAttribute("expense") ExpenseDto expenseDto,
+    public String saveOrUpddateExpense(@Valid @ModelAttribute("expense") ExpenseDto expenseDto,
                                        BindingResult bindingResult, Model model) throws ParseException {
+        new ExpenseValidator().validate(expenseDto, bindingResult);
+
+        if(bindingResult.hasErrors()){
+           return "create_expense_form";
+        }
         expenseService.saveExpense(expenseDto);
         return "redirect:/expenses";
     }

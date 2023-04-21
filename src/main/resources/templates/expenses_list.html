@@ -9,6 +9,9 @@
 <body>
 <h1>List of Expenses</h1>
 <hr/>
+<div>
+    <h3>Total expenses : <span th:text="${totalExpenses}"></span></h3>
+</div>
 <form method="get" th:object="${filter}" th:action="@{/filterExpenses} ">
     <input
             type="text"

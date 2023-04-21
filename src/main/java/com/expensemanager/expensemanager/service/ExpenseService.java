@@ -3,6 +3,7 @@ package com.expensemanager.expensemanager.service;
 import com.expensemanager.expensemanager.dto.ExpenseDto;
 import com.expensemanager.expensemanager.dto.ExpenseFilterDto;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.List;
 
@@ -18,4 +19,7 @@ public interface ExpenseService {
     void upDateExpense(ExpenseDto expenseDto) throws ParseException;
 
     public List<ExpenseDto> findFilteredExpenses(ExpenseFilterDto expenseFilterDto) throws ParseException;
+
+
+    public BigDecimal totalExpenses(List<ExpenseDto> expenseDtoList);
 }
