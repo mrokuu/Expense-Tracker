@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Create Expense</h1>
+    <hr/>
+    <form>
+        <input
+                type="text"
+                placeholder="search"
+        />
+    </form>
+<form th:action="@{/saveOrUpdateExpense}" th:object="${expense}" method="post">
+    <div>
+        <input
+                type="text"
+                placeholder="Exnter expense name"
+                th:field="*{name}"
+        />
+    </div>
+    <div>
+        <input
+                type="text"
+                placeholder="Exnter expense amount"
+                th:field="*{amount}"
+        />
+
+    </div>
+    <div>
+        <input
+                type="date"
+                th:field="*{dateString}"
+                placeholder="dd/mm/yyyy"
+                id="dateForm"
+        />
+
+    </div>
+    <div>
+        <textarea
+                rows="5"
+                placeholder="Emnter description"
+                th:field="*{description}"
+        ></textarea>
+    </div>
+    <button type="submit">Submit</button>
+    <input type="hidden" th:field="*{id}"/>
+    <input type="hidden" th:field="*{expenseId}"/>
+</form>
+</body>
+</html>

@@ -2,6 +2,10 @@ package com.expensemanager.expensemanager.mapper;
 
 import com.expensemanager.expensemanager.dto.ExpenseDto;
 import com.expensemanager.expensemanager.entity.Expense;
+import com.expensemanager.expensemanager.util.DateTimeUtil;
+
+import java.text.ParseException;
+import java.util.UUID;
 
 
 public class ExpenseMapper {
@@ -16,19 +20,20 @@ public class ExpenseMapper {
                 .description(expense.getDescription())
                 .amount(expense.getAmount())
                 .date(expense.getDate())
+                .dateString(DateTimeUtil.convertDateToString(expense.getDate()))
                 .build();
 
     }
 
 
-    public static Expense mapToExpense(ExpenseDto expense){
+    public static Expense mapToExpense(ExpenseDto expense) throws ParseException {
         return Expense.builder()
                 .id(expense.getId())
-                .expenseId(expense.getExpenseId())
+                .expenseId(UUID.randomUUID().toString())
                 .name(expense.getName())
                 .description(expense.getDescription())
                 .amount(expense.getAmount())
-                .date(expense.getDate())
+                .date(DateTimeUtil.convertStringToDate(expense.getDateString()))
                 .build();
 
     }
