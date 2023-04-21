@@ -1,6 +1,7 @@
 package com.expensemanager.expensemanager.controller;
 
 import com.expensemanager.expensemanager.dto.ExpenseDto;
+import com.expensemanager.expensemanager.dto.ExpenseFilterDto;
 import com.expensemanager.expensemanager.entity.Expense;
 import com.expensemanager.expensemanager.service.implementation.ExpenseServiceImpl;
 import org.springframework.stereotype.Controller;
@@ -17,19 +18,23 @@ public class ExpenseController {
     private ExpenseServiceImpl expenseService;
 
     public ExpenseController(ExpenseServiceImpl expenseService) {
+
         this.expenseService = expenseService;
     }
 
     @GetMapping("/expenses")
-    public String showExpenseList(Model model){
-        List<ExpenseDto> lists= expenseService.getAllExpenses();
+    public String showExpenseList(Model model,
+                                  ExpenseFilterDto expenseFilterDto){
+        List<ExpenseDto> lists= expenseService.findAllExpenses();
         model.addAttribute("expenses", lists);
+        model.addAttribute("filter", expenseFilterDto);
         return "expenses_list";
     }
 
     @GetMapping("/createExpense" )
-    public String createExpense(Model model){
-        model.addAttribute("expense", new ExpenseDto());
+    public String createExpense(Model model,
+                                ExpenseDto expenseDto){
+        model.addAttribute("expense", expenseDto);
         return "create_expense_form";
     }
 
