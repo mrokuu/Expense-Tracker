@@ -3,7 +3,9 @@ package com.expensemanager.expensemanager.service.implementation;
 
 import com.expensemanager.expensemanager.dto.ExpenseDto;
 import com.expensemanager.expensemanager.dto.ExpenseFilterDto;
+import com.expensemanager.expensemanager.dto.RegistrationDto;
 import com.expensemanager.expensemanager.entity.Expense;
+import com.expensemanager.expensemanager.entity.User;
 import com.expensemanager.expensemanager.mapper.ExpenseMapper;
 import com.expensemanager.expensemanager.repository.ExpenseRepository;
 import com.expensemanager.expensemanager.service.ExpenseService;
@@ -109,6 +111,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
 		return totalSum;
 	}
+
 
 
 }
