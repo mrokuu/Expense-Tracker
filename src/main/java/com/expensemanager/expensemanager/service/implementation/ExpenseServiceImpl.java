@@ -9,6 +9,7 @@ import com.expensemanager.expensemanager.entity.User;
 import com.expensemanager.expensemanager.mapper.ExpenseMapper;
 import com.expensemanager.expensemanager.repository.ExpenseRepository;
 import com.expensemanager.expensemanager.service.ExpenseService;
+import com.expensemanager.expensemanager.service.UserService;
 import com.expensemanager.expensemanager.util.DateTimeUtil;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +23,18 @@ import java.sql.Date;
 public class ExpenseServiceImpl implements ExpenseService {
 	
 	private ExpenseRepository expenseRepository;
+	private UserService userService;
 
-	public ExpenseServiceImpl(ExpenseRepository expenseRepository) {
+	public ExpenseServiceImpl(ExpenseRepository expenseRepository, UserService userService) {
 		this.expenseRepository = expenseRepository;
+		this.userService = userService;
 	}
 
 	public List<ExpenseDto> findAllExpenses() {
-		return expenseRepository.findAll()
-				.stream()
-				.map(ExpenseMapper::mapToExpenseDto)
-				.collect(Collectors.toList());
+		User user = userService.getLoggedUser();
+		List<Expense> expenseList = expenseRepository.findByUserId(user.getId());
+		List<ExpenseDto> expenseDtoList = expenseList.stream().map(ExpenseMapper::mapToExpenseDto).collect(Collectors.toList());
+		return expenseDtoList;
 
 	}
 
@@ -45,6 +48,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 	@Override
 	public void saveExpense(ExpenseDto expenseDto) throws ParseException {
 		Expense expense = ExpenseMapper.mapToExpense(expenseDto);
+		expense.setUser(userService.getLoggedUser());
 		expenseRepository.save(expense);
 	}
 
@@ -88,9 +92,17 @@ public class ExpenseServiceImpl implements ExpenseService {
 		String startDateString = expenseFilterDTO.getStartDate();
 		String endDateString =expenseFilterDTO.getEndDate();
 
+
 		Date startDate = !startDateString.isEmpty() ? DateTimeUtil.convertStringToDate(startDateString): new Date(0);
 		Date endDate = !endDateString.isEmpty() ? DateTimeUtil.convertStringToDate(endDateString): new Date(System.currentTimeMillis());
-		List<Expense> list = expenseRepository.findByNameContainingAndDateBetween(keyword, startDate, endDate);
+
+		User user = userService.getLoggedUser();
+
+		List<Expense> list = expenseRepository.findByNameContainingAndDateBetweenAndUserId(
+				keyword,
+				startDate,
+				endDate,
+				user.getId());
 		List<ExpenseDto> filteredList = list.stream().map(ExpenseMapper::mapToExpenseDto).collect(Collectors.toList());
 		if (sortBy.equals("date")) {
 

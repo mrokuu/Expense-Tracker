@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class ExpenseFilterController {
     public String filterExpenses(@ModelAttribute("filter") ExpenseFilterDto expenseFilterDto, Model model) throws ParseException {
         List<ExpenseDto> expenseDtoList = expenseService.findFilteredExpenses(expenseFilterDto);
         model.addAttribute("expenses", expenseDtoList);
+        BigDecimal totalExpenses = expenseService.totalExpenses(expenseDtoList);
+        model.addAttribute("totalExpenses", totalExpenses);
         return "expenses_list";
     }
 
