@@ -8,6 +8,9 @@
 <body>
     <h1>Create Expense</h1>
     <hr/>
+    <div>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
 
 <form th:action="@{/saveOrUpdateExpense}" th:object="${expense}" method="post">
     <div>

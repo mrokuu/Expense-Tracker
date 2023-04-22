@@ -3,6 +3,7 @@ package com.expensemanager.expensemanager.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -33,7 +34,10 @@ public class WebSecurity {
                         .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
                         .anyRequest().authenticated()
                 );
-        http.formLogin(form -> form.loginPage("/login").failureUrl("/login?error=true").defaultSuccessUrl("/expenses").loginProcessingUrl("/login").usernameParameter("email").passwordParameter("password").permitAll());
+        http.formLogin(form -> form.loginPage("/login").failureUrl("/login?error=true").defaultSuccessUrl("/expenses").loginProcessingUrl("/login").usernameParameter("email").passwordParameter("password").permitAll())
+                .logout( logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .permitAll()
+        );
         http.csrf().disable();
         return http.build();
     }
