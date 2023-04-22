@@ -4,15 +4,19 @@ import com.expensemanager.expensemanager.dto.RegistrationDto;
 import com.expensemanager.expensemanager.entity.User;
 import com.expensemanager.expensemanager.repository.UserRepository;
 import com.expensemanager.expensemanager.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -20,7 +24,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setName(registrationDto.getName());
         user.setEmail(registrationDto.getEmail());
-        user.setPassword(registrationDto.getPassword());
+        user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
         userRepository.save(user);
     }
 }

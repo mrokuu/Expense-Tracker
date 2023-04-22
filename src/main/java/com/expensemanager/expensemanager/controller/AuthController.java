@@ -3,6 +3,7 @@ package com.expensemanager.expensemanager.controller;
 import com.expensemanager.expensemanager.dto.RegistrationDto;
 import com.expensemanager.expensemanager.entity.User;
 import com.expensemanager.expensemanager.service.UserService;
+import com.expensemanager.expensemanager.service.implementation.UserServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class AuthController {
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
@@ -33,7 +34,12 @@ public class AuthController {
     }
 
     @PostMapping ("/register")
-    public String register(@ModelAttribute("user") RegistrationDto registrationDto, Model model ){
+    public String register(@Valid @ModelAttribute("user") RegistrationDto registrationDto,
+                           BindingResult bindingResult,
+                           Model model ){
+        if(bindingResult.hasErrors()){
+            return "register";
+        }
         userService.saveUser(registrationDto);
         model.addAttribute("successMsg", true);
         return "redirect:/login";
