@@ -19,6 +19,8 @@ Functions
 
 - Editing expenses
 
+- Sorting by date or amount
+
 - Counting all expenses
 
 
