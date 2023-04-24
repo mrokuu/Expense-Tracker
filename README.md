@@ -1,4 +1,4 @@
-# ExpenseManager
+# Expense Tracker
 
 I used Java, Spring Boot, MySql, Thymeleaf, Bootstrap, HTML.
 
